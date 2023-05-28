@@ -8,13 +8,18 @@ from exp.exp_informer import Exp_Informer
 
 ''' Parameters '''
 #MODEL_DIRECTORY = "results/2021-03-28_23.20.20_bs5_sl60_ll40_pl5_fncombined_addinfo_rm_front_2.csv_lr0.05_lradj0.95_1"
-MODEL_DIRECTORY = "results/2023-05-27_21.59.09_bs5_sl60_ll40_pl5_fncombined_addinfo_rm_front_2.csv_lr0.05_lradj0.95_1"
+
 
 ''' Functions '''
 def get_args():
 
     parser = argparse.ArgumentParser()
     parser.add_argument('--output_attention', action='store_true')
+    parser.add_argument('--model_path', type=str, default='results/', help='root path of the model result')
+    parser.add_argument('--path', type=str, default='', help='path of the model path')
+    parser.add_argument('--model', type=str, default='informer',help='model of experiment, options: [informer, informerstack, informerlight(TBD)]')
+    parser.add_argument('--distil', action='store_true', help='whether to use distilling in encoder', default=False)
+    parser.add_argument('--passthrough', action='store_true', help='whether to use passthrough mechanism in encoder, default=False', default=False)
     args = parser.parse_args()
 
     args.seq_len       = 60
@@ -22,7 +27,7 @@ def get_args():
     args.pred_len      = 5
     args.dropout       = 0.05
     args.batch_size    = 5
-    args.learning_rate = 0.005
+    args.learning_rate = 1e-3
     args.lradj         = '1.05'
     args.data_path     = 'combined_addinfo_rm_front_2.csv'
     args.e_layers      = 5 # 12
@@ -35,9 +40,10 @@ def get_args():
     args.d_model = 512
     args.d_ff    = 2048
     args.scale   = False  # Add by Stock
-    args.distil  = False
+    # args.distil  = False
+    # args.passthrough = False
 
-    args.model = 'informer'
+    # args.model = 'informer'
     args.data = 'custom'
     args.root_path = './data/custom/'
     args.features = 'MS'
@@ -68,7 +74,7 @@ if __name__ == '__main__':
     print(args)
 
     exp = Exp_Informer(args)
-    exp.model.load_state_dict(torch.load(f"{MODEL_DIRECTORY}/checkpoint.pth"))
+    exp.model.load_state_dict(torch.load(f"{args.model_path + args.path}/checkpoint.pth"))
     exp.model.eval()
     
-    exp.predict(MODEL_DIRECTORY)
+    exp.predict(args.model_path + args.path)
