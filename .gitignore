@@ -1,0 +1,10 @@
+*.pth
+
+venv
+.vscode
+
+*.pyc
+*.npy
+.~lock.*
+
+*/__pycache__
