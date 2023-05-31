@@ -171,7 +171,7 @@ class Exp_Informer(Exp_Basic):
 
         history = {
             'scaled': { 'train': [], 'vali': [], 'test': [] },
-            # 'real'  : { 'train': [], 'vali': [], 'test': [] }
+            # 'real'  : { 'train': [], 'vali': [], 'test': [] },
             'learning_rate': []
         }
 
@@ -290,8 +290,8 @@ class Exp_Informer(Exp_Basic):
         saving_directory = f"results/{setting}/"
 
         mse, mae, rmse, mape, mspe = metric(preds, trues)
-        # print('mse: {}, mae: {}, rmse: {}, mape: {}, mspe: {}'.format(mse, mae, rmse, mape, mspe))
-        print('MSE: {} | MAE: {}'.format(mse, mae))
+        print('mse: {}, mae: {}, rmse: {}, mape: {}, mspe: {}'.format(mse, mae, rmse, mape, mspe))
+        # print('MSE: {} | MAE: {}'.format(mse, mae))
 
         np.save(f"{saving_directory}/metrics.npy", np.array([mae, mse, rmse, mape, mspe]))
         # np.save(f"{saving_directory}/predictions.npy", preds)

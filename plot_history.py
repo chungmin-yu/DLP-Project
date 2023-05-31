@@ -12,14 +12,14 @@ def plot_figure(path, historty, args):
 
     x_limit = int(len(historty['scaled']['train']) / 10) * 10 + 10.01
     # y1_limit = min(max(historty['scaled']['test']) + 300.01, 3000.01)
-    y1_limit = 200.01
+    y1_limit = 30.01
 
     x_ticks_major = np.arange(0, x_limit, 10)
     x_ticks_major[0] = 1
     x_ticks_minor = np.arange(0, x_limit, 1)
     x_ticks_minor[0] = 1
-    y_ticks_1_major = np.arange(0, y1_limit, 100)
-    y_ticks_1_minor = np.arange(0, y1_limit, 20)
+    y_ticks_1_major = np.arange(0, y1_limit,2)
+    y_ticks_1_minor = np.arange(0, y1_limit,2)
 
     fig, axs = plt.subplots(2)
     fig.set_size_inches(8, 10)
