@@ -27,25 +27,25 @@ def get_args():
     args.pred_len      = 5
     args.dropout       = 0.05
     args.batch_size    = 5
-    args.learning_rate = 1e-3
-    args.lradj         = '1.05'
-    args.data_path     = 'combined_addinfo_rm_front_2.csv'
+    args.learning_rate = 1e-4
+    args.lradj         = '0.7'
+    args.data_path     = 'AIRT.csv'
     args.e_layers      = 5 # 12
     args.d_layers      = 5 # 12
     args.attn          = 'prob'
     args.factor        = 5
 
-    args.enc_in  = 36
-    args.dec_in  = 36
+    args.enc_in  = 6
+    args.dec_in  = 6
     args.d_model = 512
     args.d_ff    = 2048
-    args.scale   = False  # Add by Stock
+    args.scale   = True  # Add by Stock
     # args.distil  = False
     # args.passthrough = False
 
     # args.model = 'informer'
     args.data = 'custom'
-    args.root_path = './data/custom/'
+    args.root_path = './data/stocks_10/'
     args.features = 'MS'
     args.target = 'Close'
     args.freq = 'd'
@@ -56,7 +56,7 @@ def get_args():
     args.num_workers = 0
     args.itr = 1
     args.train_epochs = 1000
-    args.patience = 20
+    args.patience = 5
     args.loss = 'mse'
     args.use_gpu = True if torch.cuda.is_available() else False
     args.gpu = 0

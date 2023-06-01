@@ -24,12 +24,12 @@ if __name__ == '__main__':
     parser.add_argument('--data_path', type=str, default='AIRT.csv', help='data file')
     parser.add_argument('--features', type=str, default='MS', help='forecasting task, options:[M, S, MS]; M:multivariate predict multivariate, S:univariate predict univariate, MS:multivariate predict univariate')
     parser.add_argument('--target', type=str, default='Close', help='target feature in S or MS task')
-    parser.add_argument('--scale', type=bool, default=False, help='scale the dataset (Add by Stock)')
+    parser.add_argument('--scale', type=bool, default=True, help='scale the dataset (Add by Stock)')
     parser.add_argument('--freq', type=str, default='d', help='freq for time features encoding, options:[t:minutely, h:hourly, d:daily, b:business days, w:weekly, m:monthly]')
 
-    parser.add_argument('--seq_len', type=int, default=120, help='input sequence length of Informer encoder') #365
-    parser.add_argument('--label_len', type=int, default=60, help='start token length of Informer decoder') 
-    parser.add_argument('--pred_len', type=int, default=15, help='prediction sequence length')
+    parser.add_argument('--seq_len', type=int, default=60, help='input sequence length of Informer encoder') # 120
+    parser.add_argument('--label_len', type=int, default=40, help='start token length of Informer decoder') # 60 
+    parser.add_argument('--pred_len', type=int, default=5, help='prediction sequence length') # 15
     # Informer decoder input: concat[start token series(label_len), zero padding series(pred_len)]
 
     parser.add_argument('--enc_in', type=int, default=6, help='encoder input size')
@@ -53,10 +53,10 @@ if __name__ == '__main__':
     parser.add_argument('--itr', type=int, default=1, help='experiments times')
     parser.add_argument('--train_epochs', type=int, default=1000, help='train epochs')
     parser.add_argument('--batch_size', type=int, default=32, help='batch size of train input data')
-    parser.add_argument('--patience', type=int, default=3, help='early stopping patience')
+    parser.add_argument('--patience', type=int, default=5, help='early stopping patience')
     parser.add_argument('--loss', type=str, default='mse', help='loss function')
     parser.add_argument('--learning_rate', type=float, default=1e-4, help='optimizer learning rate')
-    parser.add_argument('--lradj', type=str, default='1', help='adjust learning rate')
+    parser.add_argument('--lradj', type=str, default='0.7', help='adjust learning rate')
 
     parser.add_argument('--use_gpu', type=bool, default=True, help='use gpu')
     parser.add_argument('--gpu', type=int, default=0, help='gpu')

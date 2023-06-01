@@ -110,11 +110,14 @@ class Exp_Informer(Exp_Basic):
         criterion = nn.MSELoss()
         return criterion
 
-    def vali(self, vali_data, vali_loader, criterion, scaler):
+    def vali(self, vali_data, vali_loader, criterion, scaler, setting):
         self.model.eval()
 
         scaled_total_loss = []
         # real_total_loss = []
+
+        preds = []
+        trues = []
 
         for i, (batch_x,batch_y,batch_x_mark,batch_y_mark) in enumerate(vali_loader):
             batch_x = batch_x.double().to(self.device)
@@ -143,6 +146,22 @@ class Exp_Informer(Exp_Basic):
 
             # real_loss = criterion(scaler.inverse_transform(pred), scaler.inverse_transform(true))
             # real_total_loss.append(real_loss)
+
+            preds.append(pred.numpy())
+            trues.append(true.numpy())
+
+        preds = np.array(preds)
+        trues = np.array(trues)
+        #print('vali shape:', preds.shape, trues.shape)
+        preds = preds.reshape(-1, preds.shape[-2], preds.shape[-1])
+        trues = trues.reshape(-1, trues.shape[-2], trues.shape[-1])
+        #print('vali shape:', preds.shape, trues.shape)
+
+        # result save
+        saving_directory = f"results/{setting}/"
+
+        np.save(f"{saving_directory}/vali_predictions.npy", preds)
+        np.save(f"{saving_directory}/vali_truths.npy", trues)
             
         scaled_loss = np.average(scaled_total_loss)
         # real_loss = np.average(real_total_loss)
@@ -215,8 +234,8 @@ class Exp_Informer(Exp_Basic):
 
             train_scaled_loss = np.average(scaled_total_loss)
             # train_real_loss = np.average(real_total_loss)
-            vali_scaled_loss, vali_real_loss = self.vali(vali_data, vali_loader, criterion, train_data.scaler)
-            test_scaled_loss, test_real_loss = self.vali(test_data, test_loader, criterion, train_data.scaler)
+            vali_scaled_loss, vali_real_loss = self.vali(vali_data, vali_loader, criterion, train_data.scaler, setting)
+            test_scaled_loss, test_real_loss = self.vali(test_data, test_loader, criterion, train_data.scaler, setting)
 
             history['scaled']['train'].append(train_scaled_loss)
             history['scaled']['vali'].append(vali_scaled_loss)
@@ -293,9 +312,9 @@ class Exp_Informer(Exp_Basic):
         print('mse: {}, mae: {}, rmse: {}, mape: {}, mspe: {}'.format(mse, mae, rmse, mape, mspe))
         # print('MSE: {} | MAE: {}'.format(mse, mae))
 
-        np.save(f"{saving_directory}/metrics.npy", np.array([mae, mse, rmse, mape, mspe]))
-        # np.save(f"{saving_directory}/predictions.npy", preds)
-        # np.save(f"{saving_directory}/truths.npy", trues)
+        np.save(f"{saving_directory}/metrics.npy", np.array([mse, mae, rmse, mape, mspe]))
+        np.save(f"{saving_directory}/predictions.npy", preds)
+        np.save(f"{saving_directory}/truths.npy", trues)
 
         return
 
@@ -304,6 +323,7 @@ class Exp_Informer(Exp_Basic):
     def predict(self, saving_directory):
 
         preds = []
+        trues = []
         
         predict_data, predict_loader = self._get_data(flag='predict')
         for i, (batch_x, batch_y, batch_x_mark, batch_y_mark) in enumerate(predict_loader):
@@ -321,15 +341,25 @@ class Exp_Informer(Exp_Basic):
             else:
                 outputs = self.model(batch_x, batch_x_mark, dec_inp, batch_y_mark)
 
+            f_dim = -1 if self.args.features == 'MS' else 0
+            batch_y = batch_y[:,-self.args.pred_len:,f_dim:].to(self.device)
+
             pred = outputs.detach().cpu().numpy()#.squeeze()
+            true = batch_y.detach().cpu().numpy()
             preds.append(pred)
+            trues.append(true)
 
         preds = np.array(preds)
+        trues = np.array(trues)
         # print('predict shape:', preds.shape)
         preds = preds.reshape(-1, preds.shape[-2], preds.shape[-1])
+        trues = trues.reshape(-1, trues.shape[-2], trues.shape[-1])
         # print('predict shape:', preds.shape)
 
+        print("prediction:")
         print(preds[-1])
+        print("groundtruth")
+        print(trues[-1])
         # predict save
         np.save(f"{saving_directory}/last_prediction.npy", preds[-1])
         return

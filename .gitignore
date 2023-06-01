@@ -8,3 +8,4 @@ venv
 .~lock.*
 
 */__pycache__
+result/*

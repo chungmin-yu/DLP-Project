@@ -12,7 +12,8 @@ def show_metrics():
         try: data = np.load(f"results/{result}/metrics.npy")
         except: continue
         print(f"Metrics of {result}:")
-        print(f"MSE: {data[1]:13.8f} | MAE: {data[0]:11.8f}\n")
+        #print(f"MSE: {data[1]:13.8f} | MAE: {data[0]:11.8f}\n")
+        print(f"MSE: {data[0]:13.8f} | MAE: {data[1]:11.8f} | RMSE: {data[2]:11.8f} | MAPE: {data[3]:11.8f} | MSPE: {data[4]:11.8f}\n")
     return
 
 def show_pred():
