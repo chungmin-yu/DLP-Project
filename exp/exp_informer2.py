@@ -150,7 +150,10 @@ class Exp_Informer(Exp_Basic):
             true = batch_y.detach().cpu()
 
             scaled_loss = criterion(pred, true)
-            scaled_total_loss.append(scaled_loss)
+            if not torch.isnan(scaled_loss):
+                scaled_total_loss.append(scaled_loss.item())
+            # else:
+            #     print(scaled_loss)
 
             # real_loss = criterion(scaler.inverse_transform(pred), scaler.inverse_transform(true))
             # real_total_loss.append(real_loss)
@@ -236,7 +239,10 @@ class Exp_Informer(Exp_Basic):
                 batch_y = batch_y[:,-self.args.pred_len:,f_dim:].to(self.device)
                 
                 scaled_loss = criterion(outputs, batch_y)
-                scaled_total_loss.append(scaled_loss.item())
+                if not torch.isnan(scaled_loss):
+                    scaled_total_loss.append(scaled_loss.item())
+                # else:
+                #     print(scaled_loss)
 
                 # test = train_data.scaler.inverse_transform(outputs.detach().cpu())
                 # print(test[:, :, -2:-1])
