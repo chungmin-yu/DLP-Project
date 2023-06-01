@@ -27,7 +27,7 @@ if __name__ == '__main__':
     parser.add_argument('--scale', type=bool, default=True, help='scale the dataset (Add by Stock)')
     parser.add_argument('--freq', type=str, default='d', help='freq for time features encoding, options:[t:minutely, h:hourly, d:daily, b:business days, w:weekly, m:monthly]')
 
-    parser.add_argument('--seq_len', type=int, default=60, help='input sequence length of Informer encoder') # 120
+    parser.add_argument('--seq_len', type=int, default=64, help='input sequence length of Informer encoder') # 120
     parser.add_argument('--label_len', type=int, default=40, help='start token length of Informer decoder') # 60 
     parser.add_argument('--pred_len', type=int, default=5, help='prediction sequence length') # 15
     # Informer decoder input: concat[start token series(label_len), zero padding series(pred_len)]
@@ -36,7 +36,7 @@ if __name__ == '__main__':
     parser.add_argument('--dec_in', type=int, default=6, help='decoder input size')
     parser.add_argument('--c_out', type=int, default=1, help='output size')
     parser.add_argument('--e_layers', type=int, default=5, help='num of encoder layers') ## use 12
-    parser.add_argument('--d_layers', type=int, default=5, help='num of decoder layers') ## use 12
+    parser.add_argument('--d_layers', type=int, default=1, help='num of decoder layers') ## use 12
 
     parser.add_argument('--d_model', type=int, default=512, help='dimension of model')
     parser.add_argument('--n_heads', type=int, default=8, help='num of heads')
@@ -62,7 +62,7 @@ if __name__ == '__main__':
     parser.add_argument('--gpu', type=int, default=0, help='gpu')
 
     # TCCT
-    parser.add_argument('--CSP', action='store_true', help='whether to use CSPAttention, default=False', default=False)
+    #parser.add_argument('--CSP', action='store_true', help='whether to use CSPAttention, default=False', default=False)
     #parser.add_argument('--dilated', action='store_true', help='whether to use dilated causal convolution in encoder, default=False', default=False)
     parser.add_argument('--passthrough', action='store_true', help='whether to use passthrough mechanism in encoder, default=False', default=False)
 

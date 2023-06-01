@@ -89,13 +89,17 @@ class ConvLayer(nn.Module):
                                   padding_mode='circular')
         self.norm = nn.BatchNorm1d(c_in)
         self.activation = nn.ELU()
-        self.maxPool = nn.MaxPool1d(kernel_size=3, stride=2, padding=1)
+        self.maxPool_0 = nn.MaxPool1d(kernel_size=3, stride=2, padding=0)
+        self.maxPool_1 = nn.MaxPool1d(kernel_size=3, stride=2, padding=1)
 
-    def forward(self, x):
+    def forward(self, x, passthrough):
         x = self.downConv(x.permute(0, 2, 1))
         x = self.norm(x)
         x = self.activation(x)
-        x = self.maxPool(x)
+        if passthrough:
+            x = self.maxPool_0(x)
+        else:
+            x = self.maxPool_1(x)
         x = x.transpose(1,2)
         return x
 
@@ -184,7 +188,7 @@ class Encoder(nn.Module):
                     for _ in range(i):
                         x_out = self.f_F(x_out)
                     x_out_list.append(x_out.transpose(1, 2))
-                    x = conv_layer(x)
+                    x = conv_layer(x, 1)
                     attns.append(attn)
                 x, attn = self.attn_layers[-1](x)
                 x_out_list.append(x)
@@ -192,7 +196,7 @@ class Encoder(nn.Module):
             else:
                 for attn_layer, conv_layer in zip(self.attn_layers, self.conv_layers):
                     x, attn = attn_layer(x, attn_mask=attn_mask)
-                    x = conv_layer(x)
+                    x = conv_layer(x, 0)
                     attns.append(attn)
                 x, attn = self.attn_layers[-1](x)
                 attns.append(attn)
