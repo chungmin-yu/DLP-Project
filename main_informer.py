@@ -27,6 +27,7 @@ if __name__ == '__main__':
     parser.add_argument('--scale', type=bool, default=True, help='scale the dataset (Add by Stock)')
     parser.add_argument('--freq', type=str, default='d', help='freq for time features encoding, options:[t:minutely, h:hourly, d:daily, b:business days, w:weekly, m:monthly]')
 
+    # the seq_len need to the multilply of the 2^(e_layers)
     parser.add_argument('--seq_len', type=int, default=64, help='input sequence length of Informer encoder') # 120
     parser.add_argument('--label_len', type=int, default=40, help='start token length of Informer decoder') # 60 
     parser.add_argument('--pred_len', type=int, default=5, help='prediction sequence length') # 15
