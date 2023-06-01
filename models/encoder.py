@@ -201,11 +201,28 @@ class Encoder(nn.Module):
                 x, attn = self.attn_layers[-1](x)
                 attns.append(attn)
         else:
-            for attn_layer in self.attn_layers:
-                x, attn = attn_layer(x, attn_mask=attn_mask)
+            if self.f_F is not None:
+                # print('using focus')
+                # i = self.passnum
+                #for attn_layer, conv_layer in zip(self.attn_layers, self.conv_layers):
+                for attn_layer in self.attn_layers:
+                    x, attn = attn_layer(x, attn_mask=attn_mask)
+                    # i = i - 1
+                    x_out = (x.clone()).permute(0, 2, 1)
+                    # for _ in range(i):
+                    #     x_out = self.f_F(x_out)
+                    x_out_list.append(x_out.transpose(1, 2))
+                    # x = conv_layer(x, 1)
+                    attns.append(attn)
+                x, attn = self.attn_layers[-1](x)
+                x_out_list.append(x)
                 attns.append(attn)
+            else:
+                for attn_layer in self.attn_layers:
+                    x, attn = attn_layer(x, attn_mask=attn_mask)
+                    attns.append(attn)
 
-        if (self.passthrough is not None) and (self.conv_layers is not None):
+        if self.passthrough is not None:
             # print('using passthrough')
             x_pass = torch.cat(x_out_list, -1)
             x_pass = x_pass.permute(0, 2, 1)

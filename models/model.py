@@ -22,10 +22,13 @@ class Informer(nn.Module):
         self.pred_len = out_len
         self.attn = attn
         self.output_attention = output_attention
+        
         self.pconv = 0
         for i in range(e_layers):
             e_num = 2 ** i
             self.pconv += e_num
+        if not distil:
+            self.pconv = e_layers + 1
 
         # Encoding
         self.enc_embedding = DataEmbedding(enc_in, d_model, embed, freq, dropout)
