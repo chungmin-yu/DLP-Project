@@ -165,11 +165,11 @@ class Exp_Informer(Exp_Basic):
         trues = trues.reshape(-1, trues.shape[-2], trues.shape[-1])
         #print('vali shape:', preds.shape, trues.shape)
 
-        # result save
-        saving_directory = f"results/{setting}/"
-
-        np.save(f"{saving_directory}/vali_predictions.npy", preds)
-        np.save(f"{saving_directory}/vali_truths.npy", trues)
+        if setting is not None:
+            # result save
+            saving_directory = f"results/{setting}/"
+            np.save(f"{saving_directory}/vali_predictions.npy", preds)
+            np.save(f"{saving_directory}/vali_truths.npy", trues)
             
         scaled_loss = np.average(scaled_total_loss)
         # real_loss = np.average(real_total_loss)
@@ -250,7 +250,7 @@ class Exp_Informer(Exp_Basic):
             train_scaled_loss = np.average(scaled_total_loss)
             # train_real_loss = np.average(real_total_loss)
             vali_scaled_loss, vali_real_loss = self.vali(vali_data, vali_loader, criterion, train_data.scaler, setting)
-            test_scaled_loss, test_real_loss = self.vali(test_data, test_loader, criterion, train_data.scaler, setting)
+            test_scaled_loss, test_real_loss = self.vali(test_data, test_loader, criterion, train_data.scaler, None)
 
             history['scaled']['train'].append(train_scaled_loss)
             history['scaled']['vali'].append(vali_scaled_loss)
