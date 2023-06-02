@@ -21,8 +21,8 @@ def visualize():
 	trues = np.load(f"{args.model_path + args.path}/truths.npy")
 
 	
-	vali_preds = preds[:,:,-1]
-	vali_trues = trues[:,:,-1]
+	vali_preds = vali_preds[:,:,-1]
+	vali_trues = vali_trues[:,:,-1]
 	vali_size = np.size(vali_trues)
 	preds = preds[:,:,-1]
 	trues = trues[:,:,-1]
