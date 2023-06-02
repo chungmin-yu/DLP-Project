@@ -5,7 +5,8 @@ import argparse
 
 import torch
 from exp.exp_informer import Exp_Informer
-
+#from memory_profiler import profile
+import os, psutil
 
 ''' Parameters '''
 CONTINUE_TRAIN = False
@@ -80,6 +81,7 @@ if __name__ == '__main__':
     now = time.localtime()
     now_date = time.strftime('%Y-%m-%d', now)
     now_time = time.strftime('%H.%M.%S', now)
+    start = time.time()
 
     for ii in range(args.itr):
         # setting record of experiments
@@ -101,4 +103,12 @@ if __name__ == '__main__':
         print(f">>>>>>> testing: {setting} <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<")
         exp.test(setting)
 
+        # Memory usage 
+        process = psutil.Process(os.getpid())
+        print("Memory usage(MB): ", process.memory_info().rss/ 1024 ** 2, " MB")
+        end = time.time()
+        print("Excution time：%f secs" % (end - start))
+
         torch.cuda.empty_cache()
+
+    
