@@ -9,6 +9,11 @@ def visualize(args):
 	preds = np.load(f"{args.model_path + args.path}/predictions.npy")
 	trues = np.load(f"{args.model_path + args.path}/truths.npy")
 	
+	vali_preds = (vali_preds * args.std) + args.mean
+	vali_trues = (vali_trues * args.std) + args.mean
+	preds = (preds * args.std) + args.mean
+	trues = (trues * args.std) + args.mean
+
 	vali_preds = vali_preds[:,:,-1]
 	vali_trues = vali_trues[:,:,-1]
 	vali_size = np.size(vali_trues)
@@ -38,6 +43,9 @@ def predict(args):
 	preds = np.load(f"{args.model_path + args.path}/pred_predictions.npy")
 	trues = np.load(f"{args.model_path + args.path}/pred_truths.npy")
 
+	preds = (preds * args.std) + args.mean
+	trues = (trues * args.std) + args.mean
+
 	preds = preds.flatten()
 	trues = trues.flatten()
 	trues_date=[i for i in range(len(trues))]
@@ -64,6 +72,8 @@ if __name__ == '__main__':
 	parser.add_argument('--pred_len', type=int, default=15, help='prediction sequence length')
 	
 	parser.add_argument('--mode', type=int, default=1, help='visualize validation & test data : 1 / predict data : 0')
+	parser.add_argument('--mean', type=float, default=1, help='mean')
+	parser.add_argument('--std', type=float, default=1, help='std')
 	args = parser.parse_args()
 	
 	if args.mode:

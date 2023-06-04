@@ -7,8 +7,8 @@ def calculate():
     parser = argparse.ArgumentParser(description='[Informer] Long Sequences Forecasting beta calculating')
 
     parser.add_argument('--root_path', type=str, default='./data/stocks_10/', help='root path of the data file')
-    parser.add_argument('--data_path', type=str, default='AIRT.csv', help='data file')
-    parser.add_argument('--data_path2', type=str, default='AIRT.csv', help='data file')
+    parser.add_argument('--data_path', type=str, default='DS.csv', help='data file')
+    parser.add_argument('--data_path2', type=str, default='DS.csv', help='data file')
     parser.add_argument('--target', type=str, default='Close', help='target feature in S or MS task')
 
     parser.add_argument('--seq_len', type=int, default=64, help='input sequence length of Informer encoder') # 120
@@ -48,7 +48,11 @@ def calculate():
     train_data1 = df_data1[0:num_train]
     train_data2 = df_data2[0:num_train]
     correlation = np.corrcoef(train_data1, train_data2)[0][1]
-    print(correlation)
+    print("correlation: ", correlation)
+    print("mean of data1: ", np.mean(train_data1))
+    print("std of data1: ", np.std(train_data1))
+    print("mean of data2: ", np.mean(train_data2))
+    print("std of data2: ", np.std(train_data2))
 
 
 if __name__ == '__main__':
