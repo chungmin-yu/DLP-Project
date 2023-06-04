@@ -376,7 +376,7 @@ class Exp_Informer(Exp_Basic):
                 outputs = self.model(batch_x, batch_x_mark, dec_inp, batch_y_mark, batch_x2, batch_x_mark2)
 
             f_dim = -1 if self.args.features == 'MS' else 0
-            batch_y = batch_y[:,-self.args.pred_len:,f_dim:].to(self.device)
+            batch_y = batch_y[:,:,f_dim:].to(self.device)
 
             pred = outputs.detach().cpu().numpy()#.squeeze()
             true = batch_y.detach().cpu().numpy()
@@ -395,5 +395,7 @@ class Exp_Informer(Exp_Basic):
         print("groundtruth")
         print(trues[-1])
         # predict save
-        np.save(f"{saving_directory}/last_prediction.npy", preds[-1])
+        #np.save(f"{saving_directory}/last_prediction.npy", preds[-1])
+        np.save(f"{saving_directory}/pred_predictions.npy", preds[-1])
+        np.save(f"{saving_directory}/pred_truths.npy", trues[-1])
         return
