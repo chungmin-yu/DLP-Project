@@ -7,6 +7,7 @@ import torch
 from exp.exp_informer2 import Exp_Informer
 #from memory_profiler import profile
 import os, psutil
+import GPUtil as GPU
 
 ''' Parameters '''
 CONTINUE_TRAIN = False
@@ -107,7 +108,9 @@ if __name__ == '__main__':
 
         # Memory usage 
         process = psutil.Process(os.getpid())
-        print("Memory usage(MB): ", process.memory_info().rss/ 1024 ** 2, " MB")
+        print("CPU Memory usage(MB): ", process.memory_info().rss/ 1024 ** 2, " MB")
+        gpu = GPU.getGPUs()[0]
+        print("GPU RAM Free: {0:.0f}MB | Used: {1:.0f}MB | Util {2:3.0f}% | Total {3:.0f}MB".format(gpu.memoryFree, gpu.memoryUsed, gpu.memoryUtil*100, gpu.memoryTotal))
         end = time.time()
         print("Excution time：%f secs" % (end - start))
 
