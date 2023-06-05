@@ -73,7 +73,7 @@ if __name__ == '__main__':
 	parser.add_argument('--label_len', type=int, default=40, help='start token length of Informer decoder') 
 	parser.add_argument('--pred_len', type=int, default=5, help='prediction sequence length')
 	
-	parser.add_argument('--mean', type=float, default=1, help='mean')
+	parser.add_argument('--mean', type=float, default=0, help='mean')
 	parser.add_argument('--std', type=float, default=1, help='std')
 	args = parser.parse_args()
 	
