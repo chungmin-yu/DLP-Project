@@ -49,7 +49,7 @@ def predict(args):
 	preds = preds.flatten()
 	trues = trues.flatten()
 	trues_date=[i for i in range(len(trues))]
-	preds_date=[i for i in range(len(trues)-1, len(trues)-6, -1)]
+	preds_date=[i for i in range(len(trues)-1, len(trues)-1-args.pred_len, -1)]
 
 	plt.figure()
 	plt.title('Prediction Data', fontsize=18)
@@ -69,14 +69,13 @@ if __name__ == '__main__':
 	parser.add_argument('--model', type=str, default='informer',help='model of experiment, options: [informer, informerstack, informerlight(TBD)]')
 	parser.add_argument('--distil', action='store_true', help='whether to use distilling in encoder', default=False)
 	parser.add_argument('--passthrough', action='store_true', help='whether to use passthrough mechanism in encoder, default=False', default=False)
-	parser.add_argument('--pred_len', type=int, default=15, help='prediction sequence length')
+	parser.add_argument('--seq_len', type=int, default=64, help='input sequence length of Informer encoder')
+	parser.add_argument('--label_len', type=int, default=40, help='start token length of Informer decoder') 
+	parser.add_argument('--pred_len', type=int, default=5, help='prediction sequence length')
 	
-	parser.add_argument('--mode', type=int, default=1, help='visualize validation & test data : 1 / predict data : 0')
 	parser.add_argument('--mean', type=float, default=1, help='mean')
 	parser.add_argument('--std', type=float, default=1, help='std')
 	args = parser.parse_args()
 	
-	if args.mode:
-		visualize(args)
-	else:
-		predict(args)
+	visualize(args)
+	predict(args)
